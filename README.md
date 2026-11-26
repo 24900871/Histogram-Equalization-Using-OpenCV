@@ -70,12 +70,158 @@ Display original color image, histogram, enhanced image, and enhanced histogram 
 ## Program
 
 ### Developed By:
-**Name:** ____________________________  
+**Name:** JOTHIMANI P
 
-### Register No:
-____________________________  
+**Register No:** 212224230108
 
 ---
+## Grayscale Histogram Equalization
+
+```
+import cv2
+import matplotlib.pyplot as plt
+
+# Read the grayscale image
+img = cv2.imread('greybrad.jpg', cv2.IMREAD_GRAYSCALE)
+
+# Check whether image is loaded
+if img is None:
+    print("Image not found!")
+else:
+    # Perform histogram equalization
+    equalized = cv2.equalizeHist(img)
+
+    # Display original and enhanced images
+    plt.figure(figsize=(12, 8))
+
+    plt.subplot(2, 2, 1)
+    plt.imshow(img, cmap='gray')
+    plt.title('Original Grayscale Image')
+    plt.axis('off')
+
+    plt.subplot(2, 2, 2)
+    plt.imshow(equalized, cmap='gray')
+    plt.title('Histogram Equalized Image')
+    plt.axis('off')
+
+    # Histogram before enhancement
+    plt.subplot(2, 2, 3)
+    plt.hist(img.ravel(), 256, [0, 256])
+    plt.title('Histogram Before Equalization')
+    plt.xlabel('Pixel Intensity')
+    plt.ylabel('Frequency')
+
+    # Histogram after enhancement
+    plt.subplot(2, 2, 4)
+    plt.hist(equalized.ravel(), 256, [0, 256])
+    plt.title('Histogram After Equalization')
+    plt.xlabel('Pixel Intensity')
+    plt.ylabel('Frequency')
+
+    plt.tight_layout()
+    plt.show()
+
+
+
+```
+## Color Image Histogram Equalization
+
+```
+
+import cv2
+import matplotlib.pyplot as plt
+
+# Read the original color image
+img = cv2.imread('brad.jpg')
+
+# Check whether image is loaded
+if img is None:
+    print("Image not found!")
+
+else:
+    # Convert BGR to RGB for display
+    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    # Convert BGR to HSV
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+    # Split HSV channels
+    h, s, v = cv2.split(hsv)
+
+    # Perform histogram equalization on V channel
+    v_equalized = cv2.equalizeHist(v)
+
+    # Merge HSV channels
+    hsv_equalized = cv2.merge((h, s, v_equalized))
+
+    # Convert HSV back to BGR
+    equalized = cv2.cvtColor(
+        hsv_equalized,
+        cv2.COLOR_HSV2BGR
+    )
+
+    # Convert enhanced image to RGB
+    equalized_rgb = cv2.cvtColor(
+        equalized,
+        cv2.COLOR_BGR2RGB
+    )
+
+    # Display original and enhanced images
+    plt.figure(figsize=(12, 8))
+
+    plt.subplot(2, 2, 1)
+    plt.imshow(img_rgb)
+    plt.title('Original Color Image')
+    plt.axis('off')
+
+    plt.subplot(2, 2, 2)
+    plt.imshow(equalized_rgb)
+    plt.title('Histogram Equalized Color Image')
+    plt.axis('off')
+
+    # Histogram before enhancement (B, G, R)
+    plt.subplot(2, 2, 3)
+
+    colors = ('b', 'g', 'r')
+
+    for i, color in enumerate(colors):
+        hist = cv2.calcHist(
+            [img], [i], None, [256], [0, 256]
+        )
+        plt.plot(hist, color=color)
+
+    plt.title('Histogram Before Equalization')
+    plt.xlabel('Pixel Intensity')
+    plt.ylabel('Frequency')
+
+    # Histogram after enhancement
+    plt.subplot(2, 2, 4)
+
+    for i, color in enumerate(colors):
+        hist = cv2.calcHist(
+            [equalized], [i], None, [256], [0, 256]
+        )
+        plt.plot(hist, color=color)
+
+    plt.title('Histogram After Equalization')
+    plt.xlabel('Pixel Intensity')
+    plt.ylabel('Frequency')
+
+    plt.tight_layout()
+    plt.show()
+
+    # Save enhanced image
+    cv2.imwrite('color_equalized.jpg', equalized)
+
+    print("Color Histogram Equalization completed!")
+    print("Enhanced image saved successfully!")
+
+```
+
+
+
+
+
 
 ##  Output
 
@@ -86,12 +232,22 @@ ____________________________
 - Enhanced image after histogram equalization is displayed  
 - Histogram of enhanced grayscale image shows improved contrast  
 
+
+<img width="733" height="490" alt="image" src="https://github.com/user-attachments/assets/5ccbb562-6452-4184-8890-9370b1ff9d8a" />
+
+
+
+
 ### Color Image Histogram Equalization
 
 - Original color image is displayed  
 - Histogram of B, G, R channels is plotted  
 - Enhanced image after HSV-based equalization is displayed  
 - Histogram of enhanced image shows better intensity distribution  
+
+<img width="735" height="530" alt="image" src="https://github.com/user-attachments/assets/0e21cc81-ae94-4ddf-b832-f48fc0f28c3c" />
+
+
 
 ---
 
